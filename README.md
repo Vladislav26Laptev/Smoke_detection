@@ -12,7 +12,7 @@
 Тут можно привести блок-схему
  Ну а тут можно увидеть тестовую картиночку
  
-  ![repo-settings-image](https://raw.githubusercontent.com/Vladislav26Laptev/Smoke_detection/main/%D0%A1%D1%85%D0%B5%D0%BC%D0%B0.png?token=ADERAV7VU52SULXNAATZWMS7SFTI4)
+  ![Scheme](https://raw.githubusercontent.com/Vladislav26Laptev/Smoke_detection/main/%D0%A1%D1%85%D0%B5%D0%BC%D0%B0.png?token=ADERAV7VU52SULXNAATZWMS7SFTI4)
 
 # Данные
 Текст
