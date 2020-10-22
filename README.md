@@ -28,22 +28,7 @@
 ![Result_1](https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/%D0%A0%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8.png)
 
 # Алгоритм обнаружения объекта
-После алгоритма предварительной обработки, каждый полученный кадр последовательно обрабатывается моделью распознавания объектов EfficientDet-D1. Общая архитектура EfficientDet [11] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предворительно обученная на датасете ImageNet. Отличительной особенностью от одноступенчатых детекторов [12, 13, 14, 15], является дополнительный слой со взвешенной двунаправленной пирамидой признаков (BiFPN), за которым идёт классовая и блочная сеть для генерации предсказаний класса объекта и ограничивающего прямоугольника (бокс) соответственно. Бокс имеет четыре параметра, координаты (x,y) для верхнего левого угла и координаты для нижнего правого угла. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса. 
-Так же были рассмотрены модели обнаружения объектов: SSD MobileNet v2, Faster R-CNN ResNet50 V1, Faster R-CNN Inception ResNet V2. Все модели обучались в одинаковых условиях, для сравнения использовались 2-а критерия: точность (accuracy) (4), скорость работы (speed, время обработки одного кадра), результат приведен ниже (см. табл. 1).
-
-accuracy=(TP+TN)/(TP+TN+FP+FN)	(4)
-
-где TP (True Positive) – в кадре обнаружен настоящий дым, FP (False Positive) – дыма нет, но есть обнаружение, TN (True Negative) – дыма нет, и не нет обнаружения, FN (False Negative) – настоящий дым, нет обнаружения.
-
-Таблица 1
-Сравнение результатов моделей object detection 
-Model name	Accuracy, %	Speed, s
-EfficientDet-D1	96	0,64
-SSD MobileNet v2	83	0,59
-Faster R-CNN ResNet50 V1	89	1,6
-Faster R-CNN Inception ResNet V2
-91	2,1
-
+После алгоритма предварительной обработки, каждый полученный кадр последовательно обрабатывается моделью распознавания объектов EfficientDet-D1. Общая архитектура EfficientDet [7] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предворительно обученная на датасете ImageNet. Отличительной особенностью от одноступенчатых детекторов [8, 9, 10, 11], является дополнительный слой со взвешенной двунаправленной пирамидой признаков (BiFPN), за которым идёт классовая и блочная сеть для генерации предсказаний класса объекта и ограничивающего прямоугольника (бокс) соответственно. Бокс имеет четыре параметра, координаты (x,y) для верхнего левого угла и координаты для нижнего правого угла. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса.
 
 # Алгоритм классификации
 Текст
@@ -61,3 +46,9 @@ Faster R-CNN Inception ResNet V2
 4. A. Aggarwal, S. Biswas, S. Singh, S. Sural, and A. K. Majumdar, “Object tracking using background subtrac-tion and motion estimation in MPEG videos,” in Proceed-ings of the Asian Conference on Computer Vision, Springer, Berlin, Germany, January 2006. 
 5. T. Song, X. Zeng, P. Zheng, M. Jiang, and A. Rodr´Iguezpaton, “A parallel workflow pattern modelling using spiking neural P systems with colored spikes,” IEEE Transactions on Nanobioscience, vol. 17, no. 4, pp. 474–484.
 6. W. Yang, M. Mortberg, and W. Blasiak, “Influences of flame configurations on flame properties and no emis-sions in combustion with high-temperature air,” Scandinavi-an Journal of Metallurgy, vol. 34, no. 1, pp. 7–15, 2005.
+7. Mingxing Tan, Ruoming Pang, Quoc V. Le, “Effi-cientDet: Scalable and Efficient Object Detection”, https://arxiv.org/abs/1911.09070
+8. Shu Liu, Lu Qi, Haifang Qin, Jianping Shi, and Jiaya Jia. Path aggregation network for instance segmenta-tion. CVPR, 2018.
+9. Joseph Redmon and Ali Farhadi. Yolo9000: better, faster, stronger. CVPR, 2017.
+10. Tsung-Yi Lin, Piotr Dollar, Ross Girshick, Kaiming He, ´ Bharath Hariharan, and Serge Belongie. Feature pyra-mid networks for object detection. CVPR, 2017.
+11. Tsung-Yi Lin, Piotr Dollar, Ross Girshick, Kaiming He, ´ Bharath Hariharan, and Serge Belongie. Focal loss for dense object detection. ICCV, 2017.
+
