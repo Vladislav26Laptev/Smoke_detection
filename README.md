@@ -10,7 +10,7 @@
 
 # Общее описание логики работы решения
 <p align="center">
-  <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/%D0%A1%D1%85%D0%B5%D0%BC%D0%B0.png" height="50%">
+  <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/%D0%A1%D1%85%D0%B5%D0%BC%D0%B0.png" width="70%">
 </>
 
 # Данные
