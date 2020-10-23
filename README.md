@@ -23,7 +23,6 @@
  create_dataset_cl.py
  ````
 для формирования датасета обучения сети object detection и классификатора соответственно.
-<p><p/>
 Для обучения модели обнаружения объекта дополнительно необходимо запустить скрипт generate_tfrecord.py для генерации тренировочного и валидационного файла типа tfrecord. 
 ````
 python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_path=train/train.tfrecord --image_dir=Dataset/images_od
