@@ -19,11 +19,11 @@
  ````
  create_dataset_od.py
  ````
- и 
  ````
  create_dataset_cl.py
  ````
- для формирования датасета обучения сети object detection и классификатора соответственно.
+для формирования датасета обучения сети object detection и классификатора соответственно.
+<p><p/>
 Для обучения модели обнаружения объекта дополнительно необходимо запустить скрипт generate_tfrecord.py для генерации тренировочного и валидационного файла типа tfrecord. 
 ````
 python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_path=train/train.tfrecord --image_dir=Dataset/images_od
@@ -46,8 +46,9 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
 
 # Алгоритм обнаружения объекта
 После алгоритма предварительной обработки, каждый полученный кадр последовательно обрабатывается моделью распознавания объектов EfficientDet-D1. Общая архитектура EfficientDet [7] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предворительно обученная на датасете ImageNet. Отличительной особенностью от одноступенчатых детекторов [8, 9, 10, 11], является дополнительный слой со взвешенной двунаправленной пирамидой признаков (BiFPN), за которым идёт классовая и блочная сеть для генерации предсказаний класса объекта и ограничивающего прямоугольника (бокс) соответственно. Бокс имеет четыре параметра, координаты (x,y) для верхнего левого угла и координаты для нижнего правого угла. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса.
-
-https://github.com/tensorflow/models/tree/master/research/object_detection
+<p>
+ Для обнаружения объекта используем технлогию Object detection фреймворка tensorflow [12]. Для корректной работы необходимо загрузить репозиторий https://github.com/tensorflow/models/tree/master/research/object_detection в папку с проектом и запустить обучение используя следующую команду:
+</p>
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
@@ -72,4 +73,4 @@ python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_
 9. Joseph Redmon and Ali Farhadi. Yolo9000: better, faster, stronger. CVPR, 2017.
 10. Tsung-Yi Lin, Piotr Dollar, Ross Girshick, Kaiming He, ´ Bharath Hariharan, and Serge Belongie. Feature pyra-mid networks for object detection. CVPR, 2017.
 11. Tsung-Yi Lin, Piotr Dollar, Ross Girshick, Kaiming He, ´ Bharath Hariharan, and Serge Belongie. Focal loss for dense object detection. ICCV, 2017.
-
+12. Object Detection | TensorFlow Hub, https://www.tensorflow.org/hub/tutorials/object_detection
