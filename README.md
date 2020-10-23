@@ -15,9 +15,15 @@
 
 # Данные
 Для обучения модели были собраны видиозаписи на которых имеется возгорание. Доступ к записям и аннотациям к ним можно получить по ссылке: https://yadi.sk/d/DACCsm_-FbeYmQ?w=1
-<p>
- В репозитории Dataset расположены скрипты create_dataset_od.py и create_dataset_cl.py для формирования датасета обучения сети object detection и классификатора соответственно.
-</p>
+ В репозитории Dataset расположены скрипты 
+ ````
+ create_dataset_od.py
+ ````
+ и 
+ ````
+ create_dataset_cl.py
+ ````
+ для формирования датасета обучения сети object detection и классификатора соответственно.
 Для обучения модели обнаружения объекта дополнительно необходимо запустить скрипт generate_tfrecord.py для генерации тренировочного и валидационного файла типа tfrecord. 
 ````
 python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_path=train/train.tfrecord --image_dir=Dataset/images_od
