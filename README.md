@@ -115,10 +115,14 @@ A camera-based video surveillance system can monitor the specified area in real 
 ## General description of the solution
 The fire detection system captures video from the camera and breaks it into frames for further processing. The background subtraction algorithm is used to preserve the dynamic features. The processed frames are sent to the EfficientDet-D1 convolutional neural network, which is trained to find fire sites. As an additional check, the previously detected section is sent to the classifier, which is a convolutional neural network based on short-term memory networks (long short-term memory, LSTM). The result is a bounding box confirmed by the classifier. The final stage of processing is the clustering algorithm that marks the epicenter of the fire.
 
+[:arrow_up:Index](#index)
+
 ## General description of the solution logic
 <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Scheme-eng.png" width="70%">
 </>
+
+[:arrow_up:Index](#index)
 
 ## Dataset
 To train the model, video recordings were collected that show a fire. You can access the entries and their annotations by [following the link](https://yadi.sk/d/DACCsm_-FbeYmQ?w=1).
@@ -134,7 +138,9 @@ To train the object detection model, you also need to run the script generate_tf
 ````
 python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_path=train/train.tfrecord --image_dir=Dataset/images_od
 ````
-____
+
+[:arrow_up:Index](#index)
+
 ## The processing algorithm
 Due to the dynamic nature of the fire, the shape of the smoke and flame is incorrect and constantly changing. Therefore, when using smoke as an important feature for motion detection, the usual detection methods are: continuous frame change [3], background subtraction [4], and Gaussian mixed background modeling [5]. Background subtraction is necessary to set the background correctly, because there is a large gap between day and night. The mixed Gaussian model is too complex and requires setting the historical frame, Gaussian mixture number, background refresh rate, and noise at the preprocessing stage, so this algorithm is not suitable for preprocessing, since we focus on shooting one direction for 14 seconds. The advantage of the frame difference method is its ease of implementation, low programming complexity, insensitivity to changes in the scene, such as lighting, and the ability to adapt to various dynamic environments with good stability. The disadvantage is that it is not possible to extract the entire area of the object. There is an "empty hole" inside the object, and only the border can be selected. Therefore, in this paper, an improved method of frame difference is adopted. Since the air flow and the properties of the combustion itself will cause the pixels of the flame and smoke to constantly change [6], pixel images without smoke can be removed by comparing two consecutive images.Gorenje We use an improved frame difference algorithm. First, the video stream is converted to a sequence of frames. Next, frames with a certain interval are converted from three RGB channels to one channel (grayscale transition), which saves time for calculations. In the next step, the "average frame" initialization operation is performed (1). for other images, the difference between the frame and the "average"one is used. The frame difference formula is given in (2). The output is expected to be 4 processed frames with numbers 1, 3, 5, 7 for more accurate detection. The processing result is shown below.
 <p align="center">
@@ -154,20 +160,32 @@ where:
        />
 </p>
 
+[:arrow_up:Index](#index)
+
 ## Object detection algorithm
 After the preprocessing algorithm, each received frame is sequentially processed by the EfficientDet-D1 object recognition model. The overall architecture of EfficientDet [7] largely corresponds to the paradigm of single-stage detectors. It is based on the EfficientNet model, previously trained on the ImageNet dataset. A distinctive feature from single-stage detectors [8, 9, 10, 11], this is an additional layer with a weighted bidirectional feature pyramid (BiFPN), followed by a class and block network for generating predictions of the object class and bounding box, respectively. The box has four parameters,coordinates (x, y) for the upper-left corner and coordinates for the lower-right corner. For training the network requires personnel with printed markings in the form of boxes with indication of the corresponding class.
 The object Detection technology of the TensorFlow framework is used for object detection [12]. To work correctly, you need to download the [repository](https://github.com/tensorflow/models/tree/master/research/object_detection), go to the project folder and start training using the following command:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
+
+[:arrow_up:Index](#index)
+
 ## Classification algorithm
 Dummy
+
+[:arrow_up:Index](#index)
 
 ## Post-processing algorithm
 Dummy
 
+[:arrow_up:Index](#index)
+
 ## Conclusion
 Dummy
+
+[:arrow_up:Index](#index)
+
 ____
 # Источники / References
 1. C. Yuan, Z. Liu and Y. Zhang,” UAV-based forest fire detection and tracking using image processing tech-niques”, Proceedings of 2015 International Conference on Unmanned Aircraft Systems (ICUAS), 2015, pp. 639–643.
