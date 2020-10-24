@@ -36,7 +36,11 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
 
 
 
-где F_с (x,y) – «усредненный кадр», N – общее число, обрабатываемых, кадров. F_i (x,y) – текущий кадр последовательности. F_(d_i )(x,y) – разность текущего кадра последовательности и усредненного.
+где: 
+- F_с (x,y) – «усредненный кадр»;
+- N – общее число, обрабатываемых;
+- кадров. F_i (x,y) – текущий кадр последовательности; 
+- F_(d_i )(x,y) – разность текущего кадра последовательности и усредненного.
 
 <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D0%A0%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8.png"
@@ -97,7 +101,11 @@ Due to the dynamic nature of the fire, the shape of the smoke and flame is incor
 
 
 
-where F_с (x,y) is the "average frame", N is the total number of frames processed. F_i (x,y) is the current frame of the sequence. F_(d_i) (x,y) is the difference between the current frame of the sequence and the average one.
+where: 
+- F_с (x,y) is the "average frame"; 
+- N is the total number of frames processed;
+- F_i (x,y) is the current frame of the sequence;
+- F_(d_i) (x,y) is the difference between the current frame of the sequence and the average one.
 
 <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D0%A0%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8.png"
