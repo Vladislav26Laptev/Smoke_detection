@@ -58,6 +58,7 @@ python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_
 ## Итог
 Текст
 
+____
 # AI for forest fire detection
 <p> Early detection of the source of the fire, accurate localization and taking timely measures to extinguish it is an urgent task. Timely detection and appropriate action is crucial to prevent disasters, which entails saving lives and preserving people's property. </>
 <p>every day we encounter a fire detection system in the form of fire and smoke sensors. They are widely used indoors and usually require the fire to burn for some time to generate a large amount of smoke and then trigger an alarm. In addition, these devices cannot be deployed outdoors on a large scale, such as in a forest.</>
@@ -89,14 +90,14 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
 ````
 ____
 ## The processing algorithm
-Из-за динамического характера пожара, форма дыма и пламени неправильная и постоянно меняется. Поэтому при использовании дыма в качестве важного признака для обнаружения движения, обычными методами обнаружения являются: непрерывная смена кадров [3], вычитание фона [4] и моделирование смешанного фона по Гауссу [5]. Вычитание фона необходимо для правильной установки фона, потому что между днем и ночью большой промежуток. Смешанная гауссовская модель слишком сложна и требует установки исторического кадра, числа гауссовской смеси, частоты обновления фона и шума на этапе предварительной обработки, поэтому этот алгоритм не подходит для предварительной обработки, так как мы ориентируемся на съемку одного направления в течение 14 секунд. Преимущество метода разности кадров - простота реализации, низкая сложность программирования, нечувствительность к изменениям сцены, например, к освещению, и возможность адаптации к различным динамическим средам с хорошей стабильностью. Недостатком является невозможность извлечения всей площади объекта. Внутри объекта есть «пустая дыра», и можно выделить только границу. Поэтому в данной работе принят улучшенный метод разности кадров. Поскольку поток воздуха и свойства самого горения будут вызывать постоянное изменение пикселей пламени и дыма [6], пиксельные изображения без дыма могут быть удалены путем сравнения двух последовательных изображений. Мы используем улучшенный алгоритм разности кадров. Сначала видеопоток преобразуется в последовательность кадров. Далее, над кадрами с определенным интервалом выполняется преобразование из трех каналов RGB в один канал (переход в градации серого), что экономит время вычислений. На следующем шаге выполняется операция инициализации «усредненного кадра» (1). Для других изображений используется отличие кадра от «усредненного». Формула разности кадров приведена в (2). На выходе ожидается 4 обработанных кадра с номерами 1, 3, 5, 7 для более точного обнаружения. Результат обработки представлен ниже.
+Due to the dynamic nature of the fire, the shape of the smoke and flame is incorrect and constantly changing. Therefore, when using smoke as an important feature for motion detection, the usual detection methods are: continuous frame change [3], background subtraction [4], and Gaussian mixed background modeling [5]. Background subtraction is necessary to set the background correctly, because there is a large gap between day and night. The mixed Gaussian model is too complex and requires setting the historical frame, Gaussian mixture number, background refresh rate, and noise at the preprocessing stage, so this algorithm is not suitable for preprocessing, since we focus on shooting one direction for 14 seconds. The advantage of the frame difference method is its ease of implementation, low programming complexity, insensitivity to changes in the scene, such as lighting, and the ability to adapt to various dynamic environments with good stability. The disadvantage is that it is not possible to extract the entire area of the object. There is an "empty hole" inside the object, and only the border can be selected. Therefore, in this paper, an improved method of frame difference is adopted. Since the air flow and the properties of the combustion itself will cause the pixels of the flame and smoke to constantly change [6], pixel images without smoke can be removed by comparing two consecutive images.Gorenje We use an improved frame difference algorithm. First, the video stream is converted to a sequence of frames. Next, frames with a certain interval are converted from three RGB channels to one channel (grayscale transition), which saves time for calculations. In the next step, the "average frame" initialization operation is performed (1). for other images, the difference between the frame and the "average"one is used. The frame difference formula is given in (2). The output is expected to be 4 processed frames with numbers 1, 3, 5, 7 for more accurate detection. The processing result is shown below.
 <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D1%84%D0%BE%D1%80%D0%BC%D1%83%D0%BB%D1%8B_1.png"/>
 </p>
 
 
 
-где F_с (x,y) – «усредненный кадр», N – общее число, обрабатываемых, кадров. F_i (x,y) – текущий кадр последовательности. F_(d_i )(x,y) – разность текущего кадра последовательности и усредненного.
+where F_с (x,y) is the "average frame", N is the total number of frames processed. F_i (x,y) is the current frame of the sequence. F_(d_i) (x,y) is the difference between the current frame of the sequence and the average one.
 
 <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D0%A0%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8.png"
@@ -104,19 +105,19 @@ ____
 </p>
 
 ## Object detection algorithm
-После алгоритма предварительной обработки, каждый полученный кадр последовательно обрабатывается моделью распознавания объектов EfficientDet-D1. Общая архитектура EfficientDet [7] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предварительно обученная на датасете ImageNet. Отличительной особенностью от одноступенчатых детекторов [8, 9, 10, 11], является дополнительный слой со взвешенной двунаправленной пирамидой признаков (BiFPN), за которым идёт классовая и блочная сеть для генерации предсказаний класса объекта и ограничивающего прямоугольника (бокс) соответственно. Бокс имеет четыре параметра, координаты (x,y) для верхнего левого угла и координаты для нижнего правого угла. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса.
-Для обнаружения объекта используется технология Object Detection фреймворка TensorFlow [12]. Для корректной работы необходимо загрузить репозиторий https://github.com/tensorflow/models/tree/master/research/object_detection в папку с проектом и запустить обучение используя следующую команду:
+After the preprocessing algorithm, each received frame is sequentially processed by the EfficientDet-D1 object recognition model. The overall architecture of EfficientDet [7] largely corresponds to the paradigm of single-stage detectors. It is based on the EfficientNet model, previously trained on the ImageNet dataset. A distinctive feature from single-stage detectors [8, 9, 10, 11], this is an additional layer with a weighted bidirectional feature pyramid (BiFPN), followed by a class and block network for generating predictions of the object class and bounding box, respectively. The box has four parameters,coordinates (x, y) for the upper-left corner and coordinates for the lower-right corner. For training the network requires personnel with printed markings in the form of boxes with indication of the corresponding class.
+The object Detection technology of the TensorFlow framework is used for object detection [12]. To work correctly, you need to download the repository https://github.com/tensorflow/models/tree/master/research/object_detection go to the project folder and start training using the following command:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
 ## Classification algorithm
-Текст
+Dummy
 
 ## Post-processing algorithm
-Текст
+Dummy
 
 ## Conclusion
-Текст
+Dummy
 ____
 # Источники / References
 1. C. Yuan, Z. Liu and Y. Zhang,” UAV-based forest fire detection and tracking using image processing tech-niques”, Proceedings of 2015 International Conference on Unmanned Aircraft Systems (ICUAS), 2015, pp. 639–643.
