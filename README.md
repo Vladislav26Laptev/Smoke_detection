@@ -1,4 +1,7 @@
 # ИИ для обнаружения лесных пожаров
+
+[English version](#ai-for-forest-fire-detection)
+
  <p> Раннее обнаружение источника возгорания, точная локализация и принятие своевременных мер по тушению является актуальной задачей. Своевременное обнаружение и принятие соответствующих мер имеет решающее значение для предотвращения катастроф, что влечет за собой спасения жизней и сохранение имущества людей. </>
  <p>Мы повседневно сталкиваемся с системой обнаружения пожаров в виде датчиков огня и дыма. Они широко используются в помещениях и обычно требуют, чтобы огонь горел в течение некоторого времени, чтобы образовалось большое количество дыма, а затем сработала сигнализация. Кроме того, эти устройства не могут быть развернуты на открытом воздухе в больших масштабах, например, в лесу.</>
 Существует большое количество решений по детектированию пожароопасных объектов с использованием беспилотных летательных аппаратов, в том числе и с использованием алгоритмов машинного обучения [1-2]. В данном проекте рассматривается система, обрабатывающая данные с видеокамер, расположенных в лесной зоне. 
@@ -6,24 +9,28 @@
 Система видеонаблюдения на базе камеры может контролировать указанную территорию в реальном времени с помощью обработки видео. Когда система производит обнаружение пожароопасного объекта, она отправляет захваченное изображение тревоги администратору. Администратор делает окончательное подтверждение на основе отправленного изображения тревоги.
 
 ## Оглавление
-1.[Общее описание решения](#общее-описание-решения)
-2.[Общее описание логики работы решения](#общее-описание-логики-работы-решения)
-3.[Данные](#данные)
-4.[Алгоритм обработки видеоряда](#алгоритм-обработки-видеоряда)
-5.[Алгоритм обнаружения объекта](#алгоритм-обнаружения-объекта)
-6.[Алгоритм классификации](#алгоритм-классификации)
-7.[Алгоритм постобработки](#алгоритм-постобработки)
-8.[Итог](#итог)
-9.[Источники](#источники--references)
+1. [Общее описание решения](#общее-описание-решения)
+2. [Общее описание логики работы решения](#общее-описание-логики-работы-решения)
+3. [Данные](#данные)
+4. [Алгоритм обработки видеоряда](#алгоритм-обработки-видеоряда)
+5. [Алгоритм обнаружения объекта](#алгоритм-обнаружения-объекта)
+6. [Алгоритм классификации](#алгоритм-классификации)
+7. [Алгоритм постобработки](#алгоритм-постобработки)
+8. [Итог](#итог)
+9. [Источники](#источники--references)
 
 ## Общее описание решения
 Система обнаружения пожара захватывает видео с камеры и разбивает его на фреймы для дальнейшей обработки. Для сохранения признаков динамики используется алгоритм вычитания фона. Обработанные кадры поступает на сверточную нейронную сеть EfficientDet-D1, обученную находить участки возгорания. В качестве дополнительной проверки, обнаруженный ранее участок отправляется на классификатор, представляющий собой  сверточную нейронную сеть на основе сетей краткосрочной памяти (англ. Long short-term memory, LSTM). Результатом является ограничивающая рамка подтвержденная классификатором. Заключительным этапом обработки является алгоритм кластеризации, отмечающий эпицентр возгорания.
+
+[:arrow_up:Оглавление](#оглавление)
 
 ## Общее описание логики работы решения
 <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D0%A1%D1%85%D0%B5%D0%BC%D0%B0.png" width="70%">
 </>
-
+ 
+[:arrow_up:Оглавление](#оглавление)
+ 
 ## Данные
 Для обучения модели были собраны видеозаписи, на которых имеется возгорание. Доступ к записям и аннотациям к ним можно получить [по данной ссылке](https://yadi.sk/d/DACCsm_-FbeYmQ?w=1).
  В репозитории Dataset расположены скрипты
@@ -38,7 +45,9 @@
 ````
 python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_path=train/train.tfrecord --image_dir=Dataset/images_od
 ````
-
+ 
+[:arrow_up:Оглавление](#оглавление)
+ 
 ## Алгоритм обработки видеоряда 
 Из-за динамического характера пожара, форма дыма и пламени неправильная и постоянно меняется. Поэтому при использовании дыма в качестве важного признака для обнаружения движения, обычными методами обнаружения являются: непрерывная смена кадров [3], вычитание фона [4] и моделирование смешанного фона по Гауссу [5]. Вычитание фона необходимо для правильной установки фона, потому что между днем и ночью большой промежуток. Смешанная гауссовская модель слишком сложна и требует установки исторического кадра, числа гауссовской смеси, частоты обновления фона и шума на этапе предварительной обработки, поэтому этот алгоритм не подходит для предварительной обработки, так как мы ориентируемся на съемку одного направления в течение 14 секунд. Преимущество метода разности кадров - простота реализации, низкая сложность программирования, нечувствительность к изменениям сцены, например, к освещению, и возможность адаптации к различным динамическим средам с хорошей стабильностью. Недостатком является невозможность извлечения всей площади объекта. Внутри объекта есть «пустая дыра», и можно выделить только границу. Поэтому в данной работе принят улучшенный метод разности кадров. Поскольку поток воздуха и свойства самого горения будут вызывать постоянное изменение пикселей пламени и дыма [6], пиксельные изображения без дыма могут быть удалены путем сравнения двух последовательных изображений. Мы используем улучшенный алгоритм разности кадров. Сначала видеопоток преобразуется в последовательность кадров. Далее, над кадрами с определенным интервалом выполняется преобразование из трех каналов RGB в один канал (переход в градации серого), что экономит время вычислений. На следующем шаге выполняется операция инициализации «усредненного кадра» (1). Для других изображений используется отличие кадра от «усредненного». Формула разности кадров приведена в (2). На выходе ожидается 4 обработанных кадра с номерами 1, 3, 5, 7 для более точного обнаружения. Результат обработки представлен ниже.
 <p align="center">
@@ -57,22 +66,33 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D0%A0%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8.png"
        />
 </p>
-
+ 
+[:arrow_up:Оглавление](#оглавление)
+ 
 ## Алгоритм обнаружения объекта
 После алгоритма предварительной обработки, каждый полученный кадр последовательно обрабатывается моделью распознавания объектов EfficientDet-D1. Общая архитектура EfficientDet [7] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предварительно обученная на датасете ImageNet. Отличительной особенностью от одноступенчатых детекторов [8, 9, 10, 11], является дополнительный слой со взвешенной двунаправленной пирамидой признаков (BiFPN), за которым идёт классовая и блочная сеть для генерации предсказаний класса объекта и ограничивающего прямоугольника (бокс) соответственно. Бокс имеет четыре параметра, координаты (x,y) для верхнего левого угла и координаты для нижнего правого угла. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса.
 Для обнаружения объекта используется технология Object Detection фреймворка TensorFlow [12]. Для корректной работы необходимо загрузить репозиторий [Tensorflow Object Detection](https://github.com/tensorflow/models/tree/master/research/object_detection) в папку с проектом и запустить обучение используя следующую команду:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
+ 
+[:arrow_up:Оглавление](#оглавление)
+ 
 ## Алгоритм классификации
 Текст
-
+ 
+[:arrow_up:Оглавление](#оглавление)
+ 
 ## Алгоритм постобработки
 Текст
-
+ 
+[:arrow_up:Оглавление](#оглавление)
+ 
 ## Итог
 Текст
-
+ 
+[:arrow_up:Оглавление](#оглавление)
+ 
 ____
 # AI for forest fire detection
 <p> Early detection of the source of the fire, accurate localization and taking timely measures to extinguish it is an urgent task. Timely detection and appropriate action is crucial to prevent disasters, which entails saving lives and preserving people's property. </>
@@ -80,6 +100,17 @@ ____
 There are a large number of solutions for detecting fire-hazardous objects using unmanned aerial vehicles, including using machine learning algorithms [1-2]. This project considers a system that processes data from video cameras located in a forest area.
 A vision-based fire detection system captures images from cameras and immediately detects a fire, making them suitable for early fire detection. This system is cheap and easy to install. In this project, we propose a fire detection method based on computer vision that can work with a stationary camera.
 A camera-based video surveillance system can monitor the specified area in real time using video processing. When the system detects a fire hazard, it sends the captured alarm image to the administrator. The administrator makes a final confirmation based on the sent alarm image.
+
+## Index
+1. [General description of the solution](#general-description-of-the-solution)
+2. [General description of the solution logic](#general-description-of-the-solution-logic)
+3. [Dataset](#dataset)
+4. [The processing algorithm](#the-processing-algorithm)
+5. [Object detection algorithm](#object-detection-algorithm)
+6. [Classification algorithm](#classification-algorithm)
+7. [Post-processing algorithm](#post-processing-algorithm)
+8. [Conclusion](#conclusion)
+9. [References](#источники--references)
 
 ## General description of the solution
 The fire detection system captures video from the camera and breaks it into frames for further processing. The background subtraction algorithm is used to preserve the dynamic features. The processed frames are sent to the EfficientDet-D1 convolutional neural network, which is trained to find fire sites. As an additional check, the previously detected section is sent to the classifier, which is a convolutional neural network based on short-term memory networks (long short-term memory, LSTM). The result is a bounding box confirmed by the classifier. The final stage of processing is the clustering algorithm that marks the epicenter of the fire.
