@@ -177,7 +177,7 @@ python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_
 [:arrow_up:Index](#index)
 
 ## Classification algorithm
-As an additional check that the exposed area belongs to the class of a fire hazardous object, a classifier is being developed. The classifier is based on long short-term memory (LSTM) networks and a feature vector wrapped in a TimeDistrubed layer to analyze the features of frame dynamics. Also considered is the option of a committee of neural networks of various architectures by means of bagging (from the English. Bootstrap aggregating). This approach is considered with the aim of improving the accuracy of detection in order to eliminate false detections.
+As an additional check that the exposed area belongs to the class of a fire hazardous object, a classifier is being developed. The classifier is based on long short-term memory (LSTM) networks and a feature vector wrapped in a TimeDistrubed layer to analyze the features of frame dynamics. Also considered is the option of a committee of neural networks of various architectures by means of bagging (Bootstrap aggregating). This approach is considered with the aim of improving the accuracy of detection in order to eliminate false detections.
 
 [:arrow_up:Index](#index)
 
