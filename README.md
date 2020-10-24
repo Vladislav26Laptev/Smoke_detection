@@ -1,6 +1,6 @@
 # ИИ для обнаружения лесных пожаров
 
-[English version](#ai-for-forest-fire-detection)
+[English version](#neural-networks-for-forest-fire-detection)
 
  <p> Раннее обнаружение источника возгорания, точная локализация и принятие своевременных мер по тушению является актуальной задачей. Своевременное обнаружение и принятие соответствующих мер имеет решающее значение для предотвращения катастроф, что влечет за собой спасения жизней и сохранение имущества людей. </>
  <p>Мы повседневно сталкиваемся с системой обнаружения пожаров в виде датчиков огня и дыма. Они широко используются в помещениях и обычно требуют, чтобы огонь горел в течение некоторого времени, чтобы образовалось большое количество дыма, а затем сработала сигнализация. Кроме того, эти устройства не могут быть развернуты на открытом воздухе в больших масштабах, например, в лесу.</>
@@ -95,13 +95,14 @@ python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_
 [:arrow_up:Оглавление](#оглавление)
  
 ## Итог
-Данный подход после устранения недочетов, связанных с обучением и выборкой, способен, по предварительным оценкам, показать точность в районе 90% на выборке. Основные сложности при разработке на данном этапе является отсечение облаков без потери точности на выборке с дымами. Для этого нами прорабатывается подход использования дополнительной сети-классификатора, которая может снизить процент ошибки.
+Данный подход после устранения недочетов, связанных с обучением и выборкой, способен, по предварительным оценкам, показать точность в районе 90% на выборке. Основной сложностью при разработке, на данном этапе, является отсечение облаков без потери точности на выборке с дымами. Для этого нами прорабатывается подход использования дополнительной сети-классификатора, которая может снизить процент ошибки.
+
 Программная реализация доступна как с помощью языка Python, так и с помощью библиотеки на языке С++. Это позволяет встроить данный модуль в любую систему, поддерживающую передачу данных во внешние библиотеки, к примеру в платформу .net.
  
 [:arrow_up:Оглавление](#оглавление)
  
 ____
-# AI for forest fire detection
+# Neural Networks for forest fire detection
 <p> Early detection of the source of the fire, accurate localization and taking timely measures to extinguish it is an urgent task. Timely detection and appropriate action is crucial to prevent disasters, which entails saving lives and preserving people's property. </>
 <p>every day we encounter a fire detection system in the form of fire and smoke sensors. They are widely used indoors and usually require the fire to burn for some time to generate a large amount of smoke and then trigger an alarm. In addition, these devices cannot be deployed outdoors on a large scale, such as in a forest.</>
 There are a large number of solutions for detecting fire-hazardous objects using unmanned aerial vehicles, including using machine learning algorithms [1-2]. This project considers a system that processes data from video cameras located in a forest area.
@@ -153,7 +154,6 @@ Due to the dynamic nature of the fire, the shape of the smoke and flame is incor
 <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D1%84%D0%BE%D1%80%D0%BC%D1%83%D0%BB%D1%8B_1.png"/>
 </p>
-
 
 
 where: 
