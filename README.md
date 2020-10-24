@@ -195,7 +195,9 @@ Based on the [diagram](#general-description-of-the-solution-logic), the prelimin
 [:arrow_up:Index](#index)
 
 ## Conclusion
-Dummy
+This approach, after eliminating the problems associated with training and sampling, is able, according to preliminary estimates, to show an accuracy of around 90% in the sample. The main difficulty in development, at this stage, is to cut off clouds without losing accuracy on the sample with smoke. To do this, we are working on the approach of using an additional classifier network, which can reduce the error rate.
+
+The software implementation is available both in Python and in the C++ library. This allows you to embed this module in any system that supports data transfer to external libraries, for example, to the .NET platform.
 
 [:arrow_up:Index](#index)
 
