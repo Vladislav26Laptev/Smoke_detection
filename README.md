@@ -14,7 +14,7 @@
 </>
 
 ## Данные
-Для обучения модели были собраны видеозаписи, на которых имеется возгорание. Доступ к записям и аннотациям к ним можно получить по ссылке: https://yadi.sk/d/DACCsm_-FbeYmQ?w=1
+Для обучения модели были собраны видеозаписи, на которых имеется возгорание. Доступ к записям и аннотациям к ним можно получить [по данной ссылке](https://yadi.sk/d/DACCsm_-FbeYmQ?w=1).
  В репозитории Dataset расположены скрипты
  ````
  create_dataset_od.py
@@ -45,7 +45,7 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
 
 ## Алгоритм обнаружения объекта
 После алгоритма предварительной обработки, каждый полученный кадр последовательно обрабатывается моделью распознавания объектов EfficientDet-D1. Общая архитектура EfficientDet [7] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предварительно обученная на датасете ImageNet. Отличительной особенностью от одноступенчатых детекторов [8, 9, 10, 11], является дополнительный слой со взвешенной двунаправленной пирамидой признаков (BiFPN), за которым идёт классовая и блочная сеть для генерации предсказаний класса объекта и ограничивающего прямоугольника (бокс) соответственно. Бокс имеет четыре параметра, координаты (x,y) для верхнего левого угла и координаты для нижнего правого угла. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса.
-Для обнаружения объекта используется технология Object Detection фреймворка TensorFlow [12]. Для корректной работы необходимо загрузить репозиторий https://github.com/tensorflow/models/tree/master/research/object_detection в папку с проектом и запустить обучение используя следующую команду:
+Для обнаружения объекта используется технология Object Detection фреймворка TensorFlow [12]. Для корректной работы необходимо загрузить репозиторий [Tensorflow Object Detection](https://github.com/tensorflow/models/tree/master/research/object_detection) в папку с проектом и запустить обучение используя следующую команду:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
@@ -75,7 +75,7 @@ The fire detection system captures video from the camera and breaks it into fram
 </>
 
 ## Dataset
-To train the model, video recordings were collected that show a fire. You can access the entries and their annotations by following the link: https://yadi.sk/d/DACCsm_-FbeYmQ?w=1
+To train the model, video recordings were collected that show a fire. You can access the entries and their annotations by [following the link](https://yadi.sk/d/DACCsm_-FbeYmQ?w=1).
  The Dataset repository contains scripts
  ````
  create_dataset_od.py
@@ -106,7 +106,7 @@ where F_с (x,y) is the "average frame", N is the total number of frames process
 
 ## Object detection algorithm
 After the preprocessing algorithm, each received frame is sequentially processed by the EfficientDet-D1 object recognition model. The overall architecture of EfficientDet [7] largely corresponds to the paradigm of single-stage detectors. It is based on the EfficientNet model, previously trained on the ImageNet dataset. A distinctive feature from single-stage detectors [8, 9, 10, 11], this is an additional layer with a weighted bidirectional feature pyramid (BiFPN), followed by a class and block network for generating predictions of the object class and bounding box, respectively. The box has four parameters,coordinates (x, y) for the upper-left corner and coordinates for the lower-right corner. For training the network requires personnel with printed markings in the form of boxes with indication of the corresponding class.
-The object Detection technology of the TensorFlow framework is used for object detection [12]. To work correctly, you need to download the repository https://github.com/tensorflow/models/tree/master/research/object_detection go to the project folder and start training using the following command:
+The object Detection technology of the TensorFlow framework is used for object detection [12]. To work correctly, you need to download the [repository](https://github.com/tensorflow/models/tree/master/research/object_detection), go to the project folder and start training using the following command:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
