@@ -5,15 +5,15 @@
 Система обнаружения пожара на основе технического зрения захватывает изображения с камер и немедленно обнаруживает возгорание, что делает их пригодными для раннего обнаружения пожара. Такая система дешева и проста в установке. В этом проекте мы предлагаем метод обнаружения пожара на основе компьютерного зрения, который может работать со стационарной камерой.
 Система видеонаблюдения на базе камеры может контролировать указанную территорию в реальном времени с помощью обработки видео. Когда система производит обнаружение пожароопасного объекта, она отправляет захваченное изображение тревоги администратору. Администратор делает окончательное подтверждение на основе отправленного изображения тревоги.
 
-# Общее описание решения
+## Общее описание решения
 Система обнаружения пожара захватывает видео с камеры и разбивает его на фреймы для дальнейшей обработки. Для сохранения признаков динамики используется алгоритм вычитания фона. Обработанные кадры поступает на сверточную нейронную сеть EfficientDet-D1, обученную находить участки возгорания. В качестве дополнительной проверки, обнаруженный ранее участок отправляется на классификатор, представляющий собой  сверточную нейронную сеть на основе сетей краткосрочной памяти (англ. Long short-term memory, LSTM). Результатом является ограничивающая рамка подтвержденная классификатором. Заключительным этапом обработки является алгоритм кластеризации, отмечающий эпицентр возгорания.
 
-# Общее описание логики работы решения
+## Общее описание логики работы решения
 <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D0%A1%D1%85%D0%B5%D0%BC%D0%B0.png" width="70%">
 </>
 
-# Данные
+## Данные
 Для обучения модели были собраны видеозаписи, на которых имеется возгорание. Доступ к записям и аннотациям к ним можно получить по ссылке: https://yadi.sk/d/DACCsm_-FbeYmQ?w=1
  В репозитории Dataset расположены скрипты
  ````
@@ -28,7 +28,7 @@
 python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_path=train/train.tfrecord --image_dir=Dataset/images_od
 ````
 
-# Алгоритм обработки видеоряда 
+## Алгоритм обработки видеоряда 
 Из-за динамического характера пожара, форма дыма и пламени неправильная и постоянно меняется. Поэтому при использовании дыма в качестве важного признака для обнаружения движения, обычными методами обнаружения являются: непрерывная смена кадров [3], вычитание фона [4] и моделирование смешанного фона по Гауссу [5]. Вычитание фона необходимо для правильной установки фона, потому что между днем и ночью большой промежуток. Смешанная гауссовская модель слишком сложна и требует установки исторического кадра, числа гауссовской смеси, частоты обновления фона и шума на этапе предварительной обработки, поэтому этот алгоритм не подходит для предварительной обработки, так как мы ориентируемся на съемку одного направления в течение 14 секунд. Преимущество метода разности кадров - простота реализации, низкая сложность программирования, нечувствительность к изменениям сцены, например, к освещению, и возможность адаптации к различным динамическим средам с хорошей стабильностью. Недостатком является невозможность извлечения всей площади объекта. Внутри объекта есть «пустая дыра», и можно выделить только границу. Поэтому в данной работе принят улучшенный метод разности кадров. Поскольку поток воздуха и свойства самого горения будут вызывать постоянное изменение пикселей пламени и дыма [6], пиксельные изображения без дыма могут быть удалены путем сравнения двух последовательных изображений. Мы используем улучшенный алгоритм разности кадров. Сначала видеопоток преобразуется в последовательность кадров. Далее, над кадрами с определенным интервалом выполняется преобразование из трех каналов RGB в один канал (переход в градации серого), что экономит время вычислений. На следующем шаге выполняется операция инициализации «усредненного кадра» (1). Для других изображений используется отличие кадра от «усредненного». Формула разности кадров приведена в (2). На выходе ожидается 4 обработанных кадра с номерами 1, 3, 5, 7 для более точного обнаружения. Результат обработки представлен ниже.
 <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D1%84%D0%BE%D1%80%D0%BC%D1%83%D0%BB%D1%8B_1.png"/>
@@ -43,19 +43,79 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
        />
 </p>
 
-# Алгоритм обнаружения объекта
+## Алгоритм обнаружения объекта
 После алгоритма предварительной обработки, каждый полученный кадр последовательно обрабатывается моделью распознавания объектов EfficientDet-D1. Общая архитектура EfficientDet [7] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предварительно обученная на датасете ImageNet. Отличительной особенностью от одноступенчатых детекторов [8, 9, 10, 11], является дополнительный слой со взвешенной двунаправленной пирамидой признаков (BiFPN), за которым идёт классовая и блочная сеть для генерации предсказаний класса объекта и ограничивающего прямоугольника (бокс) соответственно. Бокс имеет четыре параметра, координаты (x,y) для верхнего левого угла и координаты для нижнего правого угла. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса.
 Для обнаружения объекта используется технология Object Detection фреймворка TensorFlow [12]. Для корректной работы необходимо загрузить репозиторий https://github.com/tensorflow/models/tree/master/research/object_detection в папку с проектом и запустить обучение используя следующую команду:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
-# Алгоритм классификации
+## Алгоритм классификации
 Текст
 
-# Алгоритм постобработки
+## Алгоритм постобработки
 Текст
 
-# Итог
+## Итог
+Текст
+
+# AI for forest fire detection
+<p> Early detection of the source of the fire, accurate localization and taking timely measures to extinguish it is an urgent task. Timely detection and appropriate action is crucial to prevent disasters, which entails saving lives and preserving people's property. </>
+<p>every day we encounter a fire detection system in the form of fire and smoke sensors. They are widely used indoors and usually require the fire to burn for some time to generate a large amount of smoke and then trigger an alarm. In addition, these devices cannot be deployed outdoors on a large scale, such as in a forest.</>
+There are a large number of solutions for detecting fire-hazardous objects using unmanned aerial vehicles, including using machine learning algorithms [1-2]. This project considers a system that processes data from video cameras located in a forest area.
+A vision-based fire detection system captures images from cameras and immediately detects a fire, making them suitable for early fire detection. This system is cheap and easy to install. In this project, we propose a fire detection method based on computer vision that can work with a stationary camera.
+A camera-based video surveillance system can monitor the specified area in real time using video processing. When the system detects a fire hazard, it sends the captured alarm image to the administrator. The administrator makes a final confirmation based on the sent alarm image.
+
+## General description of the solution
+The fire detection system captures video from the camera and breaks it into frames for further processing. The background subtraction algorithm is used to preserve the dynamic features. The processed frames are sent to the EfficientDet-D1 convolutional neural network, which is trained to find fire sites. As an additional check, the previously detected section is sent to the classifier, which is a convolutional neural network based on short-term memory networks (long short-term memory, LSTM). The result is a bounding box confirmed by the classifier. The final stage of processing is the clustering algorithm that marks the epicenter of the fire.
+
+## General description of the solution logic
+<p align="center">
+  <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D0%A1%D1%85%D0%B5%D0%BC%D0%B0.png" width="70%">
+</>
+
+## Dataset
+To train the model, video recordings were collected that show a fire. You can access the entries and their annotations by following the link: https://yadi.sk/d/DACCsm_-FbeYmQ?w=1
+ The Dataset repository contains scripts
+ ````
+ create_dataset_od.py
+ ````
+ ````
+ create_dataset_cl.py
+ ````
+to generate the object detection network training dataset and classifier, respectively.
+To train the object detection model, you also need to run the script generate_tfrecord.py to generate a training and validation file of the tfrecord type.
+````
+python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_path=train/train.tfrecord --image_dir=Dataset/images_od
+````
+
+## The processing algorithm
+Из-за динамического характера пожара, форма дыма и пламени неправильная и постоянно меняется. Поэтому при использовании дыма в качестве важного признака для обнаружения движения, обычными методами обнаружения являются: непрерывная смена кадров [3], вычитание фона [4] и моделирование смешанного фона по Гауссу [5]. Вычитание фона необходимо для правильной установки фона, потому что между днем и ночью большой промежуток. Смешанная гауссовская модель слишком сложна и требует установки исторического кадра, числа гауссовской смеси, частоты обновления фона и шума на этапе предварительной обработки, поэтому этот алгоритм не подходит для предварительной обработки, так как мы ориентируемся на съемку одного направления в течение 14 секунд. Преимущество метода разности кадров - простота реализации, низкая сложность программирования, нечувствительность к изменениям сцены, например, к освещению, и возможность адаптации к различным динамическим средам с хорошей стабильностью. Недостатком является невозможность извлечения всей площади объекта. Внутри объекта есть «пустая дыра», и можно выделить только границу. Поэтому в данной работе принят улучшенный метод разности кадров. Поскольку поток воздуха и свойства самого горения будут вызывать постоянное изменение пикселей пламени и дыма [6], пиксельные изображения без дыма могут быть удалены путем сравнения двух последовательных изображений. Мы используем улучшенный алгоритм разности кадров. Сначала видеопоток преобразуется в последовательность кадров. Далее, над кадрами с определенным интервалом выполняется преобразование из трех каналов RGB в один канал (переход в градации серого), что экономит время вычислений. На следующем шаге выполняется операция инициализации «усредненного кадра» (1). Для других изображений используется отличие кадра от «усредненного». Формула разности кадров приведена в (2). На выходе ожидается 4 обработанных кадра с номерами 1, 3, 5, 7 для более точного обнаружения. Результат обработки представлен ниже.
+<p align="center">
+  <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D1%84%D0%BE%D1%80%D0%BC%D1%83%D0%BB%D1%8B_1.png"/>
+</p>
+
+
+
+где F_с (x,y) – «усредненный кадр», N – общее число, обрабатываемых, кадров. F_i (x,y) – текущий кадр последовательности. F_(d_i )(x,y) – разность текущего кадра последовательности и усредненного.
+
+<p align="center">
+  <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/%D0%A0%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8.png"
+       />
+</p>
+
+## Object detection algorithm
+После алгоритма предварительной обработки, каждый полученный кадр последовательно обрабатывается моделью распознавания объектов EfficientDet-D1. Общая архитектура EfficientDet [7] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предварительно обученная на датасете ImageNet. Отличительной особенностью от одноступенчатых детекторов [8, 9, 10, 11], является дополнительный слой со взвешенной двунаправленной пирамидой признаков (BiFPN), за которым идёт классовая и блочная сеть для генерации предсказаний класса объекта и ограничивающего прямоугольника (бокс) соответственно. Бокс имеет четыре параметра, координаты (x,y) для верхнего левого угла и координаты для нижнего правого угла. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса.
+Для обнаружения объекта используется технология Object Detection фреймворка TensorFlow [12]. Для корректной работы необходимо загрузить репозиторий https://github.com/tensorflow/models/tree/master/research/object_detection в папку с проектом и запустить обучение используя следующую команду:
+````
+python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
+````
+## Classification algorithm
+Текст
+
+## Post-processing algorithm
+Текст
+
+## Conclusion
 Текст
 
 # Источники
