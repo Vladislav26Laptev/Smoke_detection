@@ -95,9 +95,7 @@ python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_
 [:arrow_up:Оглавление](#оглавление)
  
 ## Итог
-Данный подход после устранения недочетов, связанных с обучением и выборкой, способен, по предварительным оценкам, показать точность в районе 90% на выборке. Основной сложностью при разработке, на данном этапе, является отсечение облаков без потери точности на выборке с дымами. Для этого нами прорабатывается подход использования дополнительной сети-классификатора, которая может снизить процент ошибки.
-
-Программная реализация доступна как с помощью языка Python, так и с помощью библиотеки на языке С++. Это позволяет встроить данный модуль в любую систему, поддерживающую передачу данных во внешние библиотеки, к примеру в платформу .net.
+На данный момент разработан план по решению поставленной задачи, выполнена разметка данных, подготовлен датасет для сети обнаружения объектов, определена архитектура системы. В течении работы над проектом предполагается разработка решения на базе языка Python и библиотек TensorFlow.
  
 [:arrow_up:Оглавление](#оглавление)
  
@@ -195,9 +193,7 @@ Based on the [diagram](#general-description-of-the-solution-logic), the prelimin
 [:arrow_up:Index](#index)
 
 ## Conclusion
-This approach, after eliminating the problems associated with training and sampling, is able, according to preliminary estimates, to show an accuracy of around 90% in the sample. The main difficulty in development, at this stage, is to cut off clouds without losing accuracy on the sample with smoke. To do this, we are working on the approach of using an additional classifier network, which can reduce the error rate.
-
-The software implementation is available both in Python and in the C++ library. This allows you to embed this module in any system that supports data transfer to external libraries, for example, to the .NET platform.
+At the moment, a plan has been developed to solve the problem, data markup has been performed, a dataset has been prepared for the object detection network, and the system architecture has been defined. While working on the project, it is planned to develop a solution based on the Python language and TensorFlow libraries.
 
 [:arrow_up:Index](#index)
 
