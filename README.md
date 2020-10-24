@@ -84,7 +84,7 @@ python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_
 [:arrow_up:Оглавление](#оглавление)
  
 ## Алгоритм локализации очага
-Алгоритм локализации очага на данном этапе разработки основывается на обработке изображения с помощью кластеризации k-means. Подход основан на предположении, что дым на кадре распространяется снизу вверх, постепенно снижая плотность дыма по мере подъёма. Это дает наибольшую интенсивность дыма у основания очага пожара и наименьшую в высшей точке. 
+Алгоритм локализации очага на данном этапе разработки основывается на обработке изображения с помощью кластеризации. Подход основан на предположении, что дым на кадре распространяется снизу вверх, постепенно снижая плотность дыма по мере подъёма. Это дает наибольшую интенсивность дыма у основания очага пожара и наименьшую в высшей точке. 
 Основываясь на [схеме](#общее-описание-логики-работы-решения), предварительный алгоритм нахождения точки заключается в кластеризации области BB на основе интенсивности цвета. Это дает возможность выделить дым на кадре.  Далее находится наиболее интенсивный кластер, который будет очагом дыма (наиболее светлой областью). В данном кластере находится самая нижняя точка относительно изображения, которая и будет являться очагом возгорания. 
  <p align="center">
   <img 
@@ -184,7 +184,7 @@ Dummy
 [:arrow_up:Index](#index)
 
 ## Fire-source localization algorithm
-The fire-source localization algorithm at this stage of development is based on image processing using K-means clustering. The approach is based on the assumption that the smoke in the frame spreads from the bottom up, gradually reducing the smoke density as it rises. This gives the highest intensity of smoke at the base of the fire and the lowest at the highest point.
+The fire-source localization algorithm at this stage of development is based on image processing using clustering algorithm. The approach is based on the assumption that the smoke in the frame spreads from the bottom up, gradually reducing the smoke density as it rises. This gives the highest intensity of smoke at the base of the fire and the lowest at the highest point.
 Based on the [diagram](#general-description-of-the-solution-logic), the preliminary algorithm for finding a point is to cluster the BB area based on the color intensity. This makes it possible to highlight the smoke in the frame. Next is the most intense cluster, which will be the center of smoke (the lightest area). This cluster contains the lowest point relative to the image, which will be the source of the fire.
  <p align="center">
   <img 
