@@ -53,7 +53,14 @@ The object detection network receives a single frame as an input element. to do 
 [:arrow_up:Index](#index)
 
 ## Object detection algorithm
-Each selected frame is processed sequentially by the EfficientDet-D1 object recognition model. The overall architecture of EfficientDet [1] largely corresponds to the paradigm of single-stage detectors. It is based on the EfficientNet model, previously trained on the ImageNet dataset. For training the network requires personnel with printed markings in the form of boxes with indication of the corresponding class.
+Each selected frame is sequentially processed by the object recognition model. The following models were tested to solve the set back: EfficientDet-D1, SSD MobileNet v2, Faster R-CNN ResNet50 V1, Faster R-CNN Inception ResNet V2. 
+The test result is shown in the table:
+
+ <p align="center">
+  <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Model.png">
+</p>
+ 
+It can be seen from the results of the table that the best results in the ratio of prediction accuracy / speed of operation are shown by the EfficientDet-D1 model. The overall architecture of EfficientDet [1] largely corresponds to the paradigm of single-stage detectors. It is based on the EfficientNet model, previously trained on the ImageNet dataset. For training the network requires personnel with printed markings in the form of boxes with indication of the corresponding class.
 The object Detection technology of the TensorFlow framework is used for object detection [2]. To work correctly, you need to download the [Tensorflow Object Detection repository](https://github.com/tensorflow/models/tree/master/research/object_detection), go to the project folder and start training using the following command:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
@@ -72,7 +79,7 @@ The final stage is the post-processing algorithm, the main task of which is to c
 [:arrow_up:Index](#index)
 
 ## Conclusion
-Currently, a system based on the Python language and TensorFlow libraries has been developed for detecting fire-hazardous objects based on the "object detection"technology. The detection accuracy in the test sample is 75%.
+Currently, a system based on the Python language and TensorFlow libraries has been developed for detecting fire-hazardous objects based on the object detection technology. The detection accuracy in the test sample is 75%.
 
 [:arrow_up:Index](#index)
 
