@@ -62,8 +62,8 @@ The test result is shown in the table:
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Model.png">
 </p>
  
-
 From the results of the table it can be seen that the best results in the ratio of prediction accuracy / speed of operation are shown by the EfficientDet-D1 model. The general architecture of EfficientDet [1] largely corresponds to the paradigm of one-stage detectors. It is based on the EfficientNet model, previously trained on the ImageNet dataset. To train the network, frames with marked markings in the form of boxes with an indication of the corresponding class are required. In order to increase the efficiency of the system, namely to reduce the speed of operation and increase the accuracy of detecting fires in a forest, it is planned to consider other architectures of the EfficientDet family.
+
 The Object Detection technology of the TensorFlow framework is used for object detection [2]. To work correctly, you need to download the [Tensorflow Object Detection repository](https://github.com/tensorflow/models/tree/master/research/object_detection), go to the project folder and start training using the following command:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
