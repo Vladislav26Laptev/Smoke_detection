@@ -32,7 +32,7 @@ The Dataset repository contains scripts
  create_dataset_od.py
  ````
 for generating the object detection network training dataset.
-The files
+Following files:
  ````
  dataset_label_od.py
  ````
