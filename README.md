@@ -64,6 +64,11 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
 Обучение модели проходило с использование видеокарты NVIDIA GeForce RTX 2080 Ti, время обучения модели составило ~ 14ч. Результат работы приведен ниже:
+<p align="center">
+  <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Res_1.png">
+</>
+ 
+ Завершающим этапом является алгоритм постобработки, главной цклью которго стоит объежинение пересекающихся ограничивающих рамок, по средством метрики IOU (Intersection over union)
 [:arrow_up:Оглавление](#оглавление)
  
 ## Итог
