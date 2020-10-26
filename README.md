@@ -14,7 +14,7 @@ A vision-based fire detection system captures images from cameras and immediatel
 7. [References](#references)
 
 ## General description of the solution
-The fire detection system captures video from the camera and splits it into frames for further processing. A neural network based on convolutional layers processes each frame received. The result is a bounding box that highlights the fire area in the frame and the location of the fire with some probability.
+The fire detection system captures video from the camera and splits it into frames for further processing. A neural network based on convolutional layers processes each frame received. The result is a bounding box that highlights the fire area in the frame with some probability.
 
 [:arrow_up:Index](#index)
 
