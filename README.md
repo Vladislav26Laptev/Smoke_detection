@@ -82,7 +82,7 @@ The final stage is a post-processing algorithm, the main goal of which is to com
 [:arrow_up:Index](#index)
 
 ## Conclusion
-At the moment, it is planned to develop a library based on the Python language and TensorFlow libraries for recognizing fire-hazardous objects based on the studied and implemented "object detection" technologies and new approaches to improve detection accuracy. At the moment, the accuracy of fire detection in the test sample is 75%.
+At the moment, it is planned to develop a library based on the Python and the TensorFlow libraries for recognizing fire hazardous objects based on the researched and implemented "object detection" technologies and new approaches to improve the detection accuracy. At the moment, the accuracy of detecting fires in the test sample is 75%
 
 [:arrow_up:Index](#index)
 
