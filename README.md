@@ -50,7 +50,7 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
 [:arrow_up:Index](#index)
 
 ## The processing algorithm
-The object detection network receives one frame as an input element, for this the video stream is converted into a sequence of frames. Next, 5 or more frames are selected from the sequence with equal time intervals for sequential processing. The result will be an average prediction for all frames, since it is possible to take a frame from the sequence at the moment when the fire is not visible.
+The object detection network receives one frame as an input element, for this the video stream is converted into a sequence of frames. For sequential processing, 5 or more frames are selected from the sequence with equal time intervals for sequential processing. The result will be an average prediction for all frames, since it is possible to take a frame from the sequence at the moment when the fire is not visible.
 
 [:arrow_up:Index](#index)
 
@@ -82,7 +82,7 @@ The final stage is a post-processing algorithm, the main goal of which is to com
 [:arrow_up:Index](#index)
 
 ## Conclusion
-Currently, a system based on the Python language and TensorFlow libraries has been developed for recognizing fire-hazardous objects based on the "object detection"technology. The accuracy of fire detection in the test sample is 75%.
+At the moment, it is planned to develop a library based on the Python language and TensorFlow libraries for recognizing fire-hazardous objects based on the studied and implemented "object detection" technologies and new approaches to improve detection accuracy. At the moment, the accuracy of fire detection in the test sample is 75%.
 
 [:arrow_up:Index](#index)
 
