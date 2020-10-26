@@ -24,7 +24,7 @@ The fire detection system captures video from the camera and breaks it into fram
 [:arrow_up:Index](#index)
 
 ## Dataset
-To train the model, video recordings were collected that show a fire. You can access the entries and their annotations [at this link] (http://yadi.sk/d/DACCsm_-FbeYmQ?w=1).
+To train the model, video recordings were collected that show a fire. You can access the entries and their annotations [at this link](http://yadi.sk/d/DACCsm_-FbeYmQ?w=1).
 The Dataset repository contains scripts
  ````
  create_dataset_od.py
