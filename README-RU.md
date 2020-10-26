@@ -54,7 +54,12 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
 [:arrow_up:Оглавление](#оглавление)
  
 ## Алгоритм обнаружения объекта
-Каждый выбранный кадр последовательно обрабатывается моделью распознавания объектов EfficientDet-D1. Общая архитектура EfficientDet [1] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предварительно обученная на датасете ImageNet. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса.
+Каждый выбранный кадр последовательно обрабатывается моделью распознавания объектов. Для решения поставленной задчи были протестированы следующие модели: EfficientDet-D1, SSD MobileNet v2, Faster R-CNN ResNet50 V1, Faster R-CNN Inception ResNet V2. Результат тестирования приведен в таблице:
+
+<p align="center">
+  <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Model.png">
+</>
+Из результатов таблицы видно, что наилучшие результаты в соотношении точность предсказания/скорость работы показывает модель EfficientDet-D1. Общая архитектура EfficientDet [1] в значительной степени соответствует парадигме одноступенчатых (one-stage) детекторов. За основу взята модель EfficientNet, предварительно обученная на датасете ImageNet. Для обучения сети требуются кадры с нанесенной разметкой в виде боксов с указанием соответствующего класса. В дальнейшем планируетя рассмтореть и другие архитектуры семейства EfficientDet.
 Для обнаружения объекта используется технология Object Detection фреймворка TensorFlow [2]. Для корректной работы необходимо загрузить репозиторий [Tensorflow Object Detection](https://github.com/tensorflow/models/tree/master/research/object_detection) в папку с проектом и запустить обучение используя следующую команду:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
