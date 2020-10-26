@@ -2,7 +2,7 @@
 
 # Neural Networks for forest fire detection
 <p> Early detection of the source of the fire, accurate localization and taking timely measures to extinguish it is an urgent task. Timely detection and appropriate action is crucial to prevent disasters, which entails saving lives and preserving people's property. </>
-A vision-based fire detection system captures images from cameras and immediately detects a fire, making them suitable for early fire detection. In this project, we propose a fire detection method based on computer vision that can work with a stationary camera.
+A vision-based fire detection system captures images from cameras and immediately detects a fire, making it suitable for early fire detection. In this project, we propose a fire detection method based on computer vision that can work with a stationary camera.
 
 ## Index
 1. [General description of the solution](#general-description-of-the-solution)
