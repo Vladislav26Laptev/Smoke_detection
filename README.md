@@ -14,7 +14,7 @@ A vision-based fire detection system captures images from cameras and immediatel
 7. [References](#references)
 
 ## General description of the solution
-The fire detection system captures video from the camera and breaks it into frames for further processing. A neural network based on convolutional layers processes each received frame. The result is a bounding box that highlights the area of fire in the frame and the point of localization of the fire with some probability.
+The fire detection system captures video from the camera and splits it into frames for further processing. A neural network based on convolutional layers processes each frame received. The result is a bounding box that highlights the fire area in the frame and the location of the fire with some probability.
 
 [:arrow_up:Index](#index)
 
@@ -27,7 +27,7 @@ The fire detection system captures video from the camera and breaks it into fram
 
 ## Dataset
 To train the model, video recordings were collected and marked, on which there is a fire. You can access the entries and their annotations [at this link](http://yadi.sk/d/DACCsm_-FbeYmQ?w=1).
-The Dataset repository contains scripts
+The Dataset repository contains script:
  ````
  create_dataset_od.py
  ````
@@ -50,7 +50,7 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
 [:arrow_up:Index](#index)
 
 ## The processing algorithm
-The object detection network receives a single frame as an input element. To do this, the video stream is converted to a sequence of frames. Next, 5 frames are selected from the sequence with an equal time interval for sequential processing. The result will be an average prediction for all 5 frames, since it is possible to take a frame from the sequence at a moment when the fire is not visible.
+The object detection network receives one frame as an input element, for this the video stream is converted into a sequence of frames. Next, 5 or more frames are selected from the sequence with equal time intervals for sequential processing. The result will be an average prediction for all frames, since it is possible to take a frame from the sequence at the moment when the fire is not visible.
 
 [:arrow_up:Index](#index)
 
@@ -62,8 +62,9 @@ The test result is shown in the table:
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Model.png">
 </p>
  
-It can be seen from the results of the table that the best results in the ratio of prediction accuracy / speed of operation are shown by the EfficientDet-D1 model. The overall architecture of EfficientDet [1] largely corresponds to the paradigm of single-stage detectors. It is based on the EfficientNet model, previously trained on the ImageNet dataset. For training the network requires personnel with printed markings in the form of boxes with indication of the corresponding class.
-The object Detection technology of the TensorFlow framework is used for object detection [2]. To work correctly, you need to download the [Tensorflow Object Detection repository](https://github.com/tensorflow/models/tree/master/research/object_detection), go to the project folder and start training using the following command:
+
+From the results of the table it can be seen that the best results in the ratio of prediction accuracy / speed of operation are shown by the EfficientDet-D1 model. The general architecture of EfficientDet [1] largely corresponds to the paradigm of one-stage detectors. It is based on the EfficientNet model, previously trained on the ImageNet dataset. To train the network, frames with marked markings in the form of boxes with an indication of the corresponding class are required. In order to increase the efficiency of the system, namely to reduce the speed of operation and increase the accuracy of detecting fires in a forest, it is planned to consider other architectures of the EfficientDet family.
+The Object Detection technology of the TensorFlow framework is used for object detection [2]. To work correctly, you need to download the [Tensorflow Object Detection repository](https://github.com/tensorflow/models/tree/master/research/object_detection), go to the project folder and start training using the following command:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
@@ -72,7 +73,7 @@ The model was trained using the NVIDIA GeForce RTX 2080 Ti video card, and the t
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Res_1.png">
 </>
  
-The final stage is the post-processing algorithm, the main task of which is to connect intersecting bounding boxes using the IOU (Intersection over union) metric and combine data into clusters of 2 or more intersections to cut off false positives. As a result, we have:
+The final stage is a post-processing algorithm, the main goal of which is to combine intersecting bounding boxes using the IOU (Intersection over union) metric and combine data into clusters of 2 or more intersections to cut off false positives. As a result, we have:
  
  <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Res_2.png">
