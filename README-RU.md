@@ -33,7 +33,8 @@ This page in [English](./README.md)
  create_dataset_od.py
  ````
 для формирования датасета обучения сети object detection.
-Файлы
+
+Файлы:
  ````
  dataset_label_od.py
  ````
