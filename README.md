@@ -54,7 +54,7 @@ The object detection network receives a single frame as an input element. to do 
 
 ## Object detection algorithm
 Each selected frame is processed sequentially by the EfficientDet-D1 object recognition model. The overall architecture of EfficientDet [1] largely corresponds to the paradigm of single-stage detectors. It is based on the EfficientNet model, previously trained on the ImageNet dataset. For training the network requires personnel with printed markings in the form of boxes with indication of the corresponding class.
-The object Detection technology of the TensorFlow framework is used for object detection [2]. To work correctly, you need to download the [Tensorflow Object Detection repository](https://github.com/tensorflow/models/tree/master/research/object_detection) go to the project folder and start training using the following command:
+The object Detection technology of the TensorFlow framework is used for object detection [2]. To work correctly, you need to download the [Tensorflow Object Detection repository](https://github.com/tensorflow/models/tree/master/research/object_detection), go to the project folder and start training using the following command:
 ````
 python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_smoke --pipeline_config_path=model_od/efficientdet_d1/pipeline.config
 ````
