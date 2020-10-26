@@ -61,21 +61,10 @@ for j in a:
     TEST_VIDEO_PATH = os.path.join('video', v_name + '.mp4')
     cap = cv2.VideoCapture(TEST_VIDEO_PATH)
 
-    MFrame = np.zeros((height, width, 3))
     for i in range(frames):
         cap.set(1, frameslist[i])
         b = frameslist[i]
         _, frame = cap.read()
-        MFrame = MFrame + frame
-
-    MFrame = MFrame / frames
-
-    for i in range(frames):
-        cap.set(1, frameslist[i])
-        b = frameslist[i]
-        _, frame = cap.read()
-
-        frame = np.abs(MFrame - frame)
         image_path = os.path.join('images_od/', v_name + '_output_img' + '_' + str(b + 1).zfill(3) + '.png')
         cv2.imwrite(image_path, frame)
 
