@@ -73,7 +73,7 @@ python model_main_tf2.py --alsologtostderr --model_dir=model_od/efficientdet_d1_
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Res_1.png">
 </>
  
- Завершающим этапом является алгоритм постобработки, главной цклью которго стоит объежинение пересекающихся ограничивающих рамок, по средством метрики IOU (Intersection over union) и объединения данных в кластеры по 2 и более пересечения, для отсекания ложных срабатываний. В результате имеем:
+ Завершающим этапом является алгоритм постобработки, главной целью которого стоит объединение пересекающихся ограничивающих рамок, по средством метрики IOU (Intersection over union) и объединения данных в кластеры по 2 и более пересечения, для отсекания ложных срабатываний. В результате имеем:
  
  <p align="center">
   <img src="https://github.com/Vladislav26Laptev/Smoke_detection/blob/main/data/Res_2.png">
