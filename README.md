@@ -50,7 +50,7 @@ python generate_tfrecord.py --csv_input=Dataset/dataset_label_od.csv --output_pa
 [:arrow_up:Index](#index)
 
 ## The processing algorithm
-The object detection network receives a single frame as an input element. To do this, the video stream is converted to a sequence of frames. Next, 5 frames are selected from the sequence with an equal time interval for sequential processing. The result will be an average prediction for all 5 frames, since it is possible to take a frame from the sequence at a time when the fire is not visible.
+The object detection network receives a single frame as an input element. To do this, the video stream is converted to a sequence of frames. Next, 5 frames are selected from the sequence with an equal time interval for sequential processing. The result will be an average prediction for all 5 frames, since it is possible to take a frame from the sequence at a moment when the fire is not visible.
 
 [:arrow_up:Index](#index)
 
